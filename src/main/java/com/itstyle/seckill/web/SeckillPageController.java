@@ -1,8 +1,12 @@
 package com.itstyle.seckill.web;
 
+import com.itstyle.seckill.tuomin.Page;
+import com.itstyle.seckill.tuomin.TuominAnn;
+import com.itstyle.seckill.tuomin.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jms.Destination;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,6 +59,65 @@ public class SeckillPageController {
 		List<Seckill>  List = seckillService.getSeckillList();
 		return Result.ok(List);
 	}
+
+	@ApiOperation(value = "脱敏数据测试List", nickname = "脱敏List")
+	@GetMapping("/tuominList")
+	@TuominAnn
+	public Result tuominList() {
+		//返回JSON数据、前端VUE迭代即可
+		List<User> userList = new ArrayList<>();
+
+		for (int i = 0; i <5 ; i++) {
+			User user = new User();
+			user.setAccount("account账号");
+			user.setIdCardNo("12345678099");
+			user.setMobileNo("135890867809");
+			user.setPassword("jiayou123wqy");
+			user.setRealName("朴树");
+			userList.add(user);
+		}
+
+		return Result.ok(userList);
+	}
+
+	@ApiOperation(value = "脱敏数据测试tuominPage", nickname = "脱敏tuominPage")
+	@GetMapping("/tuominPage")
+	@TuominAnn
+	public Result tuominPage() {
+		//返回JSON数据、前端VUE迭代即可
+		List<User> userList = new ArrayList<>();
+
+		for (int i = 0; i <5 ; i++) {
+			User user = new User();
+			user.setAccount("account账号");
+			user.setIdCardNo("12345678099");
+			user.setMobileNo("135890867809");
+			user.setPassword("jiayou123wqy");
+			user.setRealName("朴树");
+			userList.add(user);
+		}
+
+		Page<User> page = new Page();
+
+		page.setRecords(userList);
+		page.setCurrentPageNum(1);
+		page.setPageSize(10);
+		return Result.ok(page);
+	}
+
+	@ApiOperation(value = "脱敏数据测试single", nickname = "脱敏single")
+	@TuominAnn
+	@GetMapping("/tuominSingle")
+	public Result tuominSingle() {
+		User user = new User();
+		user.setAccount("account账号");
+		user.setIdCardNo("12345678099");
+		user.setMobileNo("135890867809");
+		user.setPassword("jiayou123wqy");
+		user.setRealName("朴树");
+		return Result.ok(user);
+	}
+
 	
 	@PostMapping("/startSeckill")
     public Result  startSeckill(String ticket,String randstr,HttpServletRequest request) {
